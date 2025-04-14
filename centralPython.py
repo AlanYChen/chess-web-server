@@ -1,7 +1,7 @@
 from stockfishPython import Stockfish
 import platform
 
-system = platform.system
+system = platform.system()
 
 print("system:", system)
 
