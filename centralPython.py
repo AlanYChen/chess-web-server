@@ -3,6 +3,8 @@ import platform
 
 system = platform.system
 
+print("system:", system)
+
 executable_name = "stockfish" if system == "Linux" else "stockfish.exe"
 executable_path = ("../bin/" + executable_name)
 
