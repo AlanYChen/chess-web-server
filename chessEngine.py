@@ -1,6 +1,6 @@
+from stockfishPython import Stockfish
 import platform
 # import time
-from stockfishPython import Stockfish
 
 system = platform.system()
 

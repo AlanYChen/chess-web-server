@@ -2,8 +2,8 @@ import socket
 # import time
 from chessEngine import run_engine
 
-HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+HOST = ""
+PORT = 8000  # Port to listen on (non-privileged ports are > 1023)
 
 print("Listening on port {}".format(PORT))
 
@@ -22,7 +22,7 @@ def respond_to_client(client_socket):
     
     # print(f"lines: {lines}")
 
-    fen = lines[4]
+    fen = lines[-1]
     best_move = run_engine(fen)
 
     response = 'HTTP/1.1 200 OK\n\n' + best_move
