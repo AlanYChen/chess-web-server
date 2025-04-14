@@ -12,6 +12,12 @@ const command = (platform === "win32" ? "python" : "python3")
 
 console.log(`platform: ${platform}`)
 
+// TEST CHANGE
+
+console.log("Hi")
+
+// TEST CHANGE END
+
 // Set body field with no parsing applied
 app.use((req, res, next) => {
     let data = '';
