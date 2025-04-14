@@ -1,12 +1,16 @@
 const express = require('express')
 const {exec} = require('child_process')
 const {Mutex} = require('async-mutex')
-const os = require('node:os')
 
 const app = express()
 const PORT = 8000
 
 const mutex = new Mutex()
+
+const platform = process.platform
+const command = (platform === "win32" ? "python" : "python3")
+
+console.log(`platform: ${platform}`)
 
 // Set body field with no parsing applied
 app.use((req, res, next) => {
@@ -25,9 +29,7 @@ function runPythonScript(req, resp, release) {
 
     let startTime = Date.now()
 
-    os.
-
-    exec('python3 python.py "' + fen + '"', (error, stdout, stderr) => {
+    exec(command + ' python.py "' + fen + '"', (error, stdout, stderr) => {
         let endTime = Date.now()
         console.log(`Python subprocess time: ${endTime - startTime}`)
         
