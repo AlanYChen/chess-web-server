@@ -1,0 +1,1 @@
+print("Hello; this is the main version of test.lua")
