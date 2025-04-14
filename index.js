@@ -8,15 +8,7 @@ const PORT = 8000
 const mutex = new Mutex()
 
 const platform = process.platform
-const command = (platform === "win32" ? "python" : "python3")
-
-console.log(`platform: ${platform}`)
-
-// TEST CHANGE
-
-console.log("Hi")
-
-// TEST CHANGE END
+const command = (platform === "win32" ? "python" : "python3") // "win32" or "linux"
 
 // Set body field with no parsing applied
 app.use((req, res, next) => {
