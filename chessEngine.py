@@ -1,6 +1,6 @@
 from stockfishPython import Stockfish
 import platform
-# import time
+import time
 
 system = platform.system()
 
@@ -12,11 +12,11 @@ stockfish = Stockfish(path=executable_path)
 def run_engine(fen):
     stockfish.set_fen_position(fen)
 
-    # start_time = time.time()
+    start_time = time.time()
 
     best_move = stockfish.get_best_move()
 
-    # end_time = time.time()
-    # print("Engine calculation time:", end_time - start_time)
+    end_time = time.time()
+    print("Engine calculation time:", end_time - start_time)
 
     return best_move

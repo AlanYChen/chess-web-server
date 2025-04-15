@@ -1,5 +1,5 @@
 import socket
-# import time
+import time
 from chessEngine import run_engine
 
 HOST = ""
@@ -10,7 +10,7 @@ print("Listening on port {}".format(PORT))
 def respond_to_client(client_socket):
     data = client_socket.recv(1024)
     request = data.decode()
-    # print(f"From client: {request}")
+    print(f"From client: {request}")
 
     lines = request.split('\n')
     http_method = lines[0].split(' ')[0]
@@ -20,7 +20,7 @@ def respond_to_client(client_socket):
         client_socket.sendall(response.encode())
         return
     
-    # print(f"lines: {lines}")
+    print(f"lines: {lines}")
 
     fen = lines[-1]
     best_move = run_engine(fen)
@@ -40,7 +40,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             break
 
         with client_socket:
-            # start_time = time.time()
+            start_time = time.time()
             respond_to_client(client_socket)
-            # end_time = time.time()
-            # print(f"Total server response time:{end_time - start_time}")
+            end_time = time.time()
+            print(f"Total server response time:{end_time - start_time}")
