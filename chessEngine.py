@@ -2,6 +2,12 @@ from stockfishPython import Stockfish
 import platform
 import time
 
+LOGGING = True
+
+def log(msg):
+    if LOGGING:
+        print(msg)
+
 system = platform.system()
 
 executable_name = "stockfish" if system == "Linux" else "stockfish.exe"
@@ -17,6 +23,6 @@ def run_engine(fen):
     best_move = stockfish.get_best_move()
 
     end_time = time.time()
-    print("Engine calculation time:", end_time - start_time)
+    log("Engine calculation time:", end_time - start_time)
 
     return best_move

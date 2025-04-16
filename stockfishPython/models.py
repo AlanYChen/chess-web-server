@@ -344,17 +344,17 @@ class Stockfish:
         self._go_time(time)
         return self._get_best_move_from_sf_popen_process()
 
-    def _get_best_move_from_sf_popen_process(self) -> Optional[str]:
-        # Precondition - a "go" command must have been sent to SF before calling this function.
-        # This function needs existing output to read from the SF popen process.
-        last_text: str = ""
-        while True:
-            text = self._read_line()
-            splitted_text = text.split(" ")
-            if splitted_text[0] == "bestmove":
-                self.info = last_text
-                return None if splitted_text[1] == "(none)" else splitted_text[1]
-            last_text = text
+    # def _get_best_move_from_sf_popen_process(self) -> Optional[str]:
+    #     # Precondition - a "go" command must have been sent to SF before calling this function.
+    #     # This function needs existing output to read from the SF popen process.
+    #     last_text: str = ""
+    #     while True:
+    #         line = self._read_line()
+    #         segments = line.split(" ")
+    #         if segments[0] == "bestmove":
+    #             self.info = last_text
+    #             return None if segments[1] == "(none)" else segments[1]
+    #         last_text = line
 
     @staticmethod
     def _is_fen_syntax_valid(fen: str) -> bool:
@@ -481,32 +481,33 @@ class Stockfish:
                 # discarded. So continue the loop until reaching "uciok", which is
                 # the last line SF outputs for the "uci" command.
 
-    def get_evaluation(self) -> dict:
-        """Evaluates current position
+    def _get_best_move_from_sf_popen_process(self) -> str:
+        """Todo old description
+        Evaluates current position
 
         Returns:
             A dictionary of the current advantage with "type" as "cp" (centipawns) or "mate" (checkmate in)
         """
 
-        evaluation = dict()
         fen_position = self.get_fen_position()
-        compare = 1 if "w" in fen_position else -1
+        colorMultiplier = 1 if "w" in fen_position else -1
         # Stockfish shows advantage relative to current player. This function will instead
         # use positive to represent advantage white, and negative for advantage black.
-        self._put(f"position {fen_position}")
-        self._go()
+
+        evaluation = ""
         while True:
-            text = self._read_line()
-            splitted_text = text.split(" ")
-            if splitted_text[0] == "info":
-                for n in range(len(splitted_text)):
-                    if splitted_text[n] == "score":
-                        evaluation = {
-                            "type": splitted_text[n + 1],
-                            "value": int(splitted_text[n + 2]) * compare,
-                        }
-            elif splitted_text[0] == "bestmove":
-                return evaluation
+            line = self._read_line()
+            segments = line.split(" ")
+            if segments[0] == "info":
+                for i in range(len(segments)):
+                    if segments[i] == "score":
+                        scoreType = segments[i + 1]
+                        scoreValue = int(segments[i + 2]) * colorMultiplier
+                        evaluation = scoreType+ " " +  scoreValue
+
+            elif segments[0] == "bestmove":
+                best_move_value = segments[1]
+                return evaluation + "_" + best_move_value
 
     def get_top_moves(self, num_top_moves: int = 5) -> List[dict]:
         """Returns info on the top moves in the position.

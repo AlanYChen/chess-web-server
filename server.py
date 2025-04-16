@@ -1,16 +1,14 @@
 import socket
 import time
-from chessEngine import run_engine
+from chessEngine import run_engine, log
 
 HOST = ""
 PORT = 8000  # Port to listen on (non-privileged ports are > 1023)
 
-print("Listening on port {}".format(PORT))
-
 def respond_to_client(client_socket):
     data = client_socket.recv(1024)
     request = data.decode()
-    print(f"From client: {request}")
+    log(f"From client: {request}")
 
     lines = request.split('\n')
     http_method = lines[0].split(' ')[0]
@@ -19,8 +17,6 @@ def respond_to_client(client_socket):
         response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
         client_socket.sendall(response.encode())
         return
-    
-    print(f"lines: {lines}")
 
     fen = lines[-1]
     best_move = run_engine(fen)
@@ -31,6 +27,7 @@ def respond_to_client(client_socket):
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen()
+    print("Listening to port {} ...".format(PORT))
 
     while True:
         try:
@@ -43,4 +40,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             start_time = time.time()
             respond_to_client(client_socket)
             end_time = time.time()
-            print(f"Total server response time:{end_time - start_time}")
+            log(f"Total server response time:{end_time - start_time}\n")
