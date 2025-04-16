@@ -40,4 +40,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             start_time = time.time()
             respond_to_client(client_socket)
             end_time = time.time()
-            log(f"Total server response time:{end_time - start_time}\n")
+            log(f"Total server response time: {end_time - start_time}\n")

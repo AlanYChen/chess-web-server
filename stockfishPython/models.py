@@ -503,7 +503,7 @@ class Stockfish:
                     if segments[i] == "score":
                         scoreType = segments[i + 1]
                         scoreValue = int(segments[i + 2]) * colorMultiplier
-                        evaluation = scoreType+ " " +  scoreValue
+                        evaluation = scoreType + " " + str(scoreValue)
 
             elif segments[0] == "bestmove":
                 best_move_value = segments[1]
