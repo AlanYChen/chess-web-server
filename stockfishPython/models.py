@@ -31,7 +31,7 @@ class Stockfish:
             "Min Split Depth": 0,
             "Threads": 1,
             "Ponder": "false",
-            "Hash": 16,
+            "Hash": 160,
             "MultiPV": 1,
             "Skill Level": 20,
             "Move Overhead": 10,
