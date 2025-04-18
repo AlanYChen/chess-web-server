@@ -8,7 +8,7 @@ PORT = 8000
 def respond_to_client(client_socket):
     data = client_socket.recv(1024)
     request = data.decode()
-    log(f"From client:\n{request}")
+    # log(f"From client:\n{request}")
 
     lines = request.splitlines()
     
@@ -24,7 +24,6 @@ def respond_to_client(client_socket):
         engine_outputs.append(run_engine(fen))
     
     total_engine_output = ','.join(engine_outputs)
-    print(total_engine_output)
 
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
     client_socket.sendall(response.encode())
@@ -33,8 +32,6 @@ def get_fens(lines):
     for i, line in enumerate(lines):
         if line == '':
             return lines[i + 1:]
-    
-    print(f"lines: {lines}")
     raise ValueError("get_fens received lines with no empty line")
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

@@ -1,4 +1,4 @@
-from stockfishPython import Stockfish
+from stockfishPython import Stockfish, StockfishException
 import platform
 import time
 
@@ -16,13 +16,18 @@ executable_path = ("../bin/" + executable_name)
 stockfish = Stockfish(path=executable_path)
 
 def run_engine(fen):
-    stockfish.set_fen_position(fen)
+    try:
+        stockfish.set_fen_position(fen)
 
-    start_time = time.time()
+        start_time = time.time()
 
-    engine_output = stockfish.get_best_move()
+        engine_output = stockfish.get_best_move()
 
-    end_time = time.time()
-    log(f"Engine calculation time: {end_time - start_time}")
-
-    return engine_output
+        end_time = time.time()
+        log(f"Engine calculation time: {end_time - start_time}")
+        return engine_output
+    except StockfishException as e:
+        print(f"StockfishException: {e}")
+        stockfish = Stockfish(path=executable_path)
+        return "err"
+    
