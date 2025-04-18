@@ -16,6 +16,7 @@ executable_path = ("../bin/" + executable_name)
 stockfish = Stockfish(path=executable_path)
 
 def run_engine(fen):
+    global stockfish
     try:
         stockfish.set_fen_position(fen)
 
