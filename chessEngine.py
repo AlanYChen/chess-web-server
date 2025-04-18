@@ -1,12 +1,7 @@
 from stockfishPython import Stockfish, StockfishException
 import platform
 import time
-
-LOGGING = True
-
-def log(msg):
-    if LOGGING:
-        print(msg)
+from logger import log
 
 system = platform.system()
 
@@ -17,18 +12,18 @@ stockfish = Stockfish(path=executable_path)
 
 def run_engine(fen):
     global stockfish
-    try:
-        stockfish.set_fen_position(fen)
+    stockfish.set_fen_position(fen)
 
-        start_time = time.time()
+    start_time = time.time()
 
-        engine_output = stockfish.get_best_move()
+    engine_output = stockfish.get_best_move()
 
-        end_time = time.time()
-        log(f"Engine calculation time: {end_time - start_time}")
-        return engine_output
-    except StockfishException as e:
-        print(f"StockfishException: {e}")
-        stockfish = Stockfish(path=executable_path)
-        return "err"
-    
+    end_time = time.time()
+    log(f"Engine calculation time: {end_time - start_time}")
+    return engine_output
+
+# Is this necessary?
+def re_instantiate_engine():
+    log(f"Reinstantiated engine")
+    global stockfish
+    stockfish = Stockfish(path=executable_path)

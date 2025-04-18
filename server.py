@@ -1,53 +1,40 @@
-import socket
-import time
-from chessEngine import run_engine, log
+import socket, time
+from logger import log
+from chessEngineRunner import get_total_engine_output
+from chessEngine import re_instantiate_engine
 
-HOST = ""
 PORT = 8000
 
 def respond_to_client(client_socket):
-    data = client_socket.recv(1024)
-    request = data.decode()
+    request = client_socket.recv(1024).decode()
     # log(f"From client:\n{request}")
 
-    lines = request.splitlines()
-    
-    # Ensure this is a POST request
-    # http_method = lines[0].split(' ')[0]
-    # if http_method != 'POST':
-    #     response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
-    #     client_socket.sendall(response.encode())
-    #     return
-
-    engine_outputs = []
-    for fen in get_fens(lines):
-        engine_outputs.append(run_engine(fen))
-    
-    total_engine_output = ','.join(engine_outputs)
+    total_engine_output = get_total_engine_output(request)
+    log(f"total_engine_output: {total_engine_output}")
 
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
     client_socket.sendall(response.encode())
 
-def get_fens(lines):
-    for i, line in enumerate(lines):
-        if line == '':
-            return lines[i + 1:]
-    raise ValueError("get_fens received lines with no empty line")
+    error_occurred = (total_engine_output[-3:] == "err")
+    return error_occurred
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
-    print("Listening to port {} ...".format(PORT))
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+    server_socket.bind(("", PORT))
+    server_socket.listen()
+    print(f"Listening to port {PORT}")
 
     while True:
         try:
-            client_socket, addr = s.accept()
+            client_socket, addr = server_socket.accept()
         except KeyboardInterrupt:
             print("Exiting")
             break
 
         with client_socket:
             start_time = time.time()
-            respond_to_client(client_socket)
+            error_occurred = respond_to_client(client_socket)
             end_time = time.time()
             log(f"Total server response time: {end_time - start_time}\n")
+
+        if error_occurred:
+            re_instantiate_engine()
