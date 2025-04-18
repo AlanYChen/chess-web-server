@@ -36,5 +36,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             end_time = time.time()
             log(f"Total server response time: {end_time - start_time}\n")
 
+        log(f"error_occurred:", error_occurred)
         if error_occurred:
             re_instantiate_engine()

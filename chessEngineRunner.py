@@ -12,7 +12,7 @@ def get_total_engine_output(request):
         except StockfishException as e:
             log(f"StockfishException: {e}")
             for j in range(i + 1, len(fens)):
-                engine_outputs[j] = "err"
+                engine_outputs.append("err")
             break
     
     total_engine_output = ','.join(engine_outputs)
