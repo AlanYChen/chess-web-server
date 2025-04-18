@@ -8,10 +8,11 @@ def get_total_engine_output(request):
     engine_outputs = []
     for i, fen in enumerate(fens):
         try:
-            engine_outputs.append(run_engine(fen))
+            engine_outputs.append(run_engine(fen), i)
         except StockfishException as e:
             log(f"StockfishException: {e}")
             for j in range(i + 1, len(fens)):
+                log(f"Append err: {j}")
                 engine_outputs.append("err")
             break
     

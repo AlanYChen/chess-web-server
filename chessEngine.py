@@ -10,16 +10,14 @@ executable_path = ("../bin/" + executable_name)
 
 stockfish = Stockfish(path=executable_path)
 
-def run_engine(fen):
+def run_engine(fen, i):
     global stockfish
     stockfish.set_fen_position(fen)
-
-    start_time = time.time()
 
     engine_output = stockfish.get_best_move()
 
     end_time = time.time()
-    log(f"Engine calculation time: {end_time - start_time}")
+    log(f"#{i} Engine calculation time: {end_time - start_time}")
     return engine_output
 
 # Is this necessary?
