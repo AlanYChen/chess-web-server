@@ -20,9 +20,9 @@ def run_engine(fen):
 
     start_time = time.time()
 
-    best_move = stockfish.get_best_move()
+    engine_output = stockfish.get_best_move()
 
     end_time = time.time()
     log(f"Engine calculation time: {end_time - start_time}")
 
-    return best_move
+    return engine_output

@@ -3,26 +3,38 @@ import time
 from chessEngine import run_engine, log
 
 HOST = ""
-PORT = 8000  # Port to listen on (non-privileged ports are > 1023)
+PORT = 8000
 
 def respond_to_client(client_socket):
     data = client_socket.recv(1024)
     request = data.decode()
-    log(f"From client: {request}")
+    log(f"From client:\n{request}")
 
     lines = request.split('\n')
     http_method = lines[0].split(' ')[0]
 
-    if http_method != 'POST':
-        response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
-        client_socket.sendall(response.encode())
-        return
+    # Ensure this is a POST request
+    # if http_method != 'POST':
+    #     response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
+    #     client_socket.sendall(response.encode())
+    #     return
 
-    fen = lines[-1]
-    best_move = run_engine(fen)
+    engine_outputs = []
+    for fen in get_fens(lines):
+        engine_outputs.append(run_engine(fen))
+    
+    total_engine_output = ','.join(engine_outputs)
+    print(total_engine_output)
 
-    response = 'HTTP/1.1 200 OK\n\n' + best_move
+    response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
     client_socket.sendall(response.encode())
+
+def get_fens(lines):
+    for i, line in enumerate(lines):
+        if line == '':
+            return lines[i]
+    
+    raise ValueError("get_fens received lines with no empty line")
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
