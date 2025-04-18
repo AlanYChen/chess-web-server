@@ -11,9 +11,9 @@ def respond_to_client(client_socket):
     log(f"From client:\n{request}")
 
     lines = request.split('\n')
-    http_method = lines[0].split(' ')[0]
-
+    
     # Ensure this is a POST request
+    # http_method = lines[0].split(' ')[0]
     # if http_method != 'POST':
     #     response = 'HTTP/1.1 405 Method Not Allowed\n\nAllow: GET'
     #     client_socket.sendall(response.encode())
@@ -32,8 +32,9 @@ def respond_to_client(client_socket):
 def get_fens(lines):
     for i, line in enumerate(lines):
         if line == '':
-            return lines[i]
+            return lines[i + 1:]
     
+    print(f"lines: {lines}")
     raise ValueError("get_fens received lines with no empty line")
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
