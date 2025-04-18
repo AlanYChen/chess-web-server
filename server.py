@@ -10,7 +10,7 @@ def respond_to_client(client_socket):
     request = data.decode()
     log(f"From client:\n{request}")
 
-    lines = request.split('\n')
+    lines = request.splitlines()
     
     # Ensure this is a POST request
     # http_method = lines[0].split(' ')[0]
