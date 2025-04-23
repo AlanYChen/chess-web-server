@@ -24,6 +24,7 @@ def run_engine(fen, i):
     stockfish.update_engine_parameters(
         {"UCI_LimitStrength": "true", "UCI_Elo": 1350}
     )
+    stockfish.set_depth(2)
 
     stockfish.set_fen_position(fen)
 
