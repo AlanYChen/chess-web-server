@@ -14,13 +14,17 @@ def run_engine(fen, i):
     if i == 13:
         raise StockfishException("Simulated stockfish exception")
     
-    segments = fen.split(",")
-    if len(segments) == 2:
-        skill_level = int(segments[1])
-    else:
-        skill_level = 20
+    # segments = fen.split(",")
+    # if len(segments) == 2:
+    #     skill_level = int(segments[1])
+    # else:
+    #     skill_level = 20
+    # stockfish.set_skill_level(skill_level)
 
-    stockfish.set_skill_level(skill_level)
+    stockfish.update_engine_parameters(
+        {"UCI_LimitStrength": "true", "UCI_Elo": 1350}
+    )
+
     stockfish.set_fen_position(fen)
 
     start_time = time.time()
