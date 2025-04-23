@@ -13,11 +13,17 @@ stockfish = Stockfish(path=executable_path)
 def run_engine(fen, i):
     if i == 13:
         raise StockfishException("Simulated stockfish exception")
+    
+    segments = fen.split(",")
+    if len(segments) == 2:
+        skill_level = int(segments[1])
+    else:
+        skill_level = 20
 
-    global stockfish
+    stockfish.set_skill_level(skill_level)
+    stockfish.set_fen_position(fen)
 
     start_time = time.time()
-    stockfish.set_fen_position(fen)
 
     engine_output = stockfish.get_best_move()
 
@@ -25,8 +31,6 @@ def run_engine(fen, i):
     log(f"#{i} Engine calculation time: {end_time - start_time}")
     return engine_output
 
-# Is this necessary?
 def re_instantiate_engine():
     log(f"Reinstantiated engine")
-    global stockfish
     stockfish = Stockfish(path=executable_path)
