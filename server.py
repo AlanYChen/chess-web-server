@@ -18,6 +18,7 @@ def respond_to_client(client_socket):
     error_occurred = (total_engine_output[-3:] == "err")
     return error_occurred
 
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
     server_socket.bind(("", PORT))
     server_socket.listen()

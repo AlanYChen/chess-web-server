@@ -33,4 +33,5 @@ def run_engine(fen, i):
 
 def re_instantiate_engine():
     log(f"Reinstantiated engine")
+    global stockfish
     stockfish = Stockfish(path=executable_path)
