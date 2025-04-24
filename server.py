@@ -27,12 +27,8 @@ def respond_to_client(client_socket):
     return engine_error
 
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-    server_socket.bind(("", PORT))
-    server_socket.listen()
-    print(f"Listening to port {PORT}")
-
-    while True:
+def accept_connections_from_clients(server_socket):
+     while True:
         try:
             client_socket, addr = server_socket.accept()
         except KeyboardInterrupt:
@@ -49,4 +45,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             log(f"engine_error: {engine_error}")
             re_instantiate_engine()
 
-shutdown_engines()
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+    server_socket.bind(("", PORT))
+    server_socket.listen()
+    print(f"Listening to port {PORT}")
+
+    try:
+        accept_connections_from_clients(server_socket)
+    finally:
+        shutdown_engines()
+   
