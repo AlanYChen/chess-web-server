@@ -13,7 +13,7 @@ stockfish = Stockfish(path=stockfish_path)
 
 # Maia
 leela_path = "../bin/lc0"
-weights_path = "../bin/maia_weights/"
+weights_path = "../bin/maia_weights/maia-1100.pb.gz"
 
 maia = Maia(leela_path=leela_path, weights_path=weights_path)
 

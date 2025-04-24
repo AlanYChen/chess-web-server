@@ -34,7 +34,7 @@ class Maia:
             "UCI_LimitStrength": "false",
             "UCI_Elo": 1350,
         }
-        self._stockfish = subprocess.Popen(
+        self._process = subprocess.Popen(
             [leela_path, "--weights=" + weights_path],
             universal_newlines=True,
             stdin=subprocess.PIPE,
@@ -127,20 +127,20 @@ class Maia:
         self.info = ""
 
     def _put(self, command: str) -> None:
-        if not self._stockfish.stdin:
+        if not self._process.stdin:
             raise BrokenPipeError()
-        if self._stockfish.poll() is None and not self._has_quit_command_been_sent:
-            self._stockfish.stdin.write(f"{command}\n")
-            self._stockfish.stdin.flush()
+        if self._process.poll() is None and not self._has_quit_command_been_sent:
+            self._process.stdin.write(f"{command}\n")
+            self._process.stdin.flush()
             if command == "quit":
                 self._has_quit_command_been_sent = True
 
     def _read_line(self) -> str:
-        if not self._stockfish.stdout:
+        if not self._process.stdout:
             raise BrokenPipeError()
-        if self._stockfish.poll() is not None:
+        if self._process.poll() is not None:
             raise MaiaException("The Maia process has crashed")
-        return self._stockfish.stdout.readline().strip()
+        return self._process.stdout.readline().strip()
 
     def _set_option(
         self, name: str, value: Any, update_parameters_attribute: bool = True
@@ -255,7 +255,7 @@ class Maia:
             else:
                 board_rep_lines.append(f"  {board_str[::-1]}")
         while "Checkers" not in self._read_line():
-            # Gets rid of the remaining lines in _stockfish.stdout.
+            # Gets rid of the remaining lines in _process.stdout.
             # "Checkers" is in the last line outputted by Maia for the "d" command.
             pass
         board_rep = "\n".join(board_rep_lines) + "\n"
@@ -472,7 +472,7 @@ class Maia:
 
     def __del__(self) -> None:
         Maia._del_counter += 1
-        if self._stockfish.poll() is None:
+        if self._process.poll() is None:
             self._put("quit")
-            while self._stockfish.poll() is None:
+            while self._process.poll() is None:
                 pass
