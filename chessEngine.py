@@ -21,12 +21,6 @@ def run_engine(fen, i):
     if i == 13:
         raise StockfishException("Simulated stockfish exception")
     
-    ### Maia Testing
-    maia.set_fen_position(fen)
-    maia_best_move = maia.get_best_move()
-    print(f"maia_best_move: {maia_best_move}")
-    ###
-    
     # segments = fen.split(",")
     # if len(segments) == 2:
     #     skill_level = int(segments[1])
@@ -36,6 +30,7 @@ def run_engine(fen, i):
 
     segments = fen.split(",")
     if len(segments) == 3:
+        fen = segments[0]
         elo = int(segments[1])
         depth = int(segments[2])
         multiPV = int(segments[3])
@@ -58,6 +53,12 @@ def run_engine(fen, i):
 
     end_time = time.time()
     log(f"#{i} Engine calculation time: {end_time - start_time}")
+
+    ### Maia Testing
+    maia.set_fen_position(fen)
+    maia_best_move = maia.get_best_move()
+    print(f"maia_best_move: {maia_best_move}")
+    
     return engine_output
 
 def re_instantiate_engine():
