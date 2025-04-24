@@ -29,16 +29,24 @@ def run_engine(fen, i):
     # stockfish.set_skill_level(skill_level)
 
     segments = fen.split(",")
+
+    # fen, elo, depth => Stockfish with limited elo & depth
     if len(segments) == 3:
         fen = segments[0]
         elo = int(segments[1])
         depth = int(segments[2])
-        multiPV = int(segments[3])
 
         stockfish.update_engine_parameters(
-            {"UCI_LimitStrength": "true", "UCI_Elo": elo, "MultiPV": multiPV, "Slow Mover": 0, "Minimum Thinking Time": 0}
+            {"UCI_LimitStrength": "true", "UCI_Elo": elo, "Slow Mover": 0, "Minimum Thinking Time": 0}
         )
         stockfish.set_depth(depth)
+
+    # fen, elo => Maia with specific elo
+    elif len(segments) == 2:
+        fen = segments[0]
+        elo = int(segments[1])
+
+        # Execute Maia here
     else:
         stockfish.update_engine_parameters(
             {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100, "Minimum Thinking Time": 20}
