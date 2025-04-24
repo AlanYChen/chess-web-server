@@ -52,9 +52,6 @@ class Maia:
         self.update_engine_parameters(self._DEFAULT_PARAMS)
         self.update_engine_parameters(parameters)
 
-        if self.does_current_engine_version_have_wdl_option():
-            self._set_option("UCI_ShowWDL", "true", False)
-
         self._prepare_for_new_position(True)
 
     def get_parameters(self) -> dict:
