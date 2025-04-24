@@ -28,12 +28,12 @@ def run_engine(fen, i):
         multiPV = int(segments[3])
 
         stockfish.update_engine_parameters(
-            {"UCI_LimitStrength": "true", "UCI_Elo": elo, "MultiPV": multiPV, "Slow Mover": 0}
+            {"UCI_LimitStrength": "true", "UCI_Elo": elo, "MultiPV": multiPV, "Slow Mover": 0, "Minimum Thinking Time": 0}
         )
         stockfish.set_depth(depth)
     else:
         stockfish.update_engine_parameters(
-            {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100}
+            {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100, "Minimum Thinking Time": 20}
         )
         stockfish.set_depth(15)
 
