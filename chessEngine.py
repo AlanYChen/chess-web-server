@@ -70,7 +70,7 @@ def run_engine(fen, i):
 
 def re_instantiate_engines():
     log(f"Reinstantiate engines")
-    global stockfish, maia
+    global stockfish, maias
     stockfish = Stockfish(path=stockfish_path)
     del maias
     instantiate_maias()
