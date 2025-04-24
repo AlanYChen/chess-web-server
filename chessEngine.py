@@ -69,13 +69,15 @@ def run_engine(fen, i):
     return engine_output
 
 def re_instantiate_engines():
-    log(f"Reinstantiate engines")
+    log("Reinstantiate engines")
     global stockfish, maias
+
+    del stockfish, maias
     stockfish = Stockfish(path=stockfish_path)
-    del maias
     instantiate_maias()
+
+    log("Engine reinstantiation complete")
 
 def shutdown_engines():
     global stockfish, maias
-    del stockfish
-    del maias
+    del stockfish, maias
