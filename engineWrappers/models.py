@@ -13,8 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 
-class StockfishException(Exception):
-    pass
+from engineWrappers.chessRelatedExceptions import ChessEngineException
 
 class Stockfish:
     """Integrates the Stockfish chess engine with Python."""
@@ -151,7 +150,7 @@ class Stockfish:
         if not self._stockfish.stdout:
             raise BrokenPipeError()
         if self._stockfish.poll() is not None:
-            raise StockfishException("The Stockfish process has crashed")
+            raise ChessEngineException("Stockfish process crashed")
         return self._stockfish.stdout.readline().strip()
 
     def _set_option(
@@ -399,8 +398,8 @@ class Stockfish:
         try:
             temp_sf._put("go depth 10")
             best_move = temp_sf._get_best_move_from_sf_popen_process()
-        except StockfishException:
-            # If a StockfishException is thrown, then it happened in read_line() since the SF process crashed.
+        except ChessEngineException:
+            # If a ChessEngineException is thrown, then it happened in read_line() since the SF process crashed.
             # This is likely due to the position being illegal, so set the var to false:
             return False
         else:

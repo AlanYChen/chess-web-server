@@ -3,8 +3,7 @@ from typing import Any, Optional
 import copy
 from os import path
 
-class MaiaException(Exception):
-    pass
+from engineWrappers.chessRelatedExceptions import ChessEngineException
 
 class Maia:
     """Integrates the Maia chess engine with Python."""
@@ -46,7 +45,7 @@ class Maia:
         if not self._process.stdout:
             raise BrokenPipeError()
         if self._process.poll() is not None:
-            raise MaiaException("The Maia process has crashed")
+            raise ChessEngineException("The Maia process has crashed")
         return self._process.stdout.readline().strip()
 
     def get_parameters(self) -> dict:

@@ -1,4 +1,4 @@
-from engineWrappers import StockfishException
+from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
 from chessEngine import run_engine
 from logger import log
 
@@ -9,12 +9,15 @@ def get_total_engine_output(request):
     for i, fen in enumerate(fens):
         try:
             engine_outputs.append(run_engine(fen, i))
-        except StockfishException as e:
-            log(f"StockfishException: {e}")
+        except ChessEngineException as e:
+            log(f"ChessEngineException: {e}")
             for j in range(i, len(fens)):
                 log(f"Append err: {j}")
                 engine_outputs.append("err")
             break
+        except ChessEngineImproperInputException as e:
+            log(f"ChessEngineImproperInputException: {e}")
+            engine_outputs.append("err")
     
     total_engine_output = ','.join(engine_outputs)
     return total_engine_output

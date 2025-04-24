@@ -1,6 +1,6 @@
-from engineWrappers import Stockfish, StockfishException, Maia, MaiaException
-import platform
-import time
+from engineWrappers import Stockfish, Maia
+from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
+import time, platform
 from logger import log
 
 system = platform.system()
@@ -27,7 +27,7 @@ instantiate_maias()
 
 def run_engine(fen, i):
     if i == 13:
-        raise StockfishException("Simulated stockfish exception")
+        raise ChessEngineException("Simulated chess engine exception")
     
     segments = fen.split(",")
     fen = segments[0]
@@ -49,6 +49,8 @@ def run_engine(fen, i):
     # fen, elo => Maia with specific elo
     elif len(segments) == 2:
         elo = int(segments[1])
+        if not elo in maias:
+            raise ChessEngineImproperInputException(str(elo) + ": not valid elo for Maia")
         engine = maias[elo]
     else:
         stockfish.update_engine_parameters(

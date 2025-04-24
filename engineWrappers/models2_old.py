@@ -6,8 +6,7 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 
-class MaiaException(Exception):
-    pass
+from engineWrappers.chessRelatedExceptions import ChessEngineException
 
 class Maia:
     """Integrates the Maia chess engine with Python."""
@@ -139,7 +138,7 @@ class Maia:
         if not self._process.stdout:
             raise BrokenPipeError()
         if self._process.poll() is not None:
-            raise MaiaException("The Maia process has crashed")
+            raise ChessEngineException("Maia process crashed")
         return self._process.stdout.readline().strip()
 
     def _set_option(
