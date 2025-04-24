@@ -66,5 +66,6 @@ def re_instantiate_engine():
     stockfish = Stockfish(path=stockfish_path)
 
 def shutdown_engines():
+    global stockfish, maia
     del stockfish
     del maia
