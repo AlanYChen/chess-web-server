@@ -49,6 +49,8 @@ class Maia:
         self.info: str = ""
 
         self._parameters: dict = {}
+        self.update_engine_parameters(self._DEFAULT_PARAMS)
+        self.update_engine_parameters(parameters)
 
         self._prepare_for_new_position(True)
 
