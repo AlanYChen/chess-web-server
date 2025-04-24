@@ -1,7 +1,7 @@
 import socket, time
 from logger import log
 from chessEngineRunner import get_total_engine_output
-from chessEngine import re_instantiate_engine, shutdown_engines
+from chessEngine import re_instantiate_engines, shutdown_engines
 
 PORT = 8000
 
@@ -26,7 +26,6 @@ def respond_to_client(client_socket):
     engine_error = (total_engine_output[-3:] == "err")
     return engine_error
 
-
 def accept_connections_from_clients(server_socket):
      while True:
         try:
@@ -43,7 +42,7 @@ def accept_connections_from_clients(server_socket):
 
         if engine_error:
             log(f"engine_error: {engine_error}")
-            re_instantiate_engine()
+            re_instantiate_engines()
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
     server_socket.bind(("", PORT))

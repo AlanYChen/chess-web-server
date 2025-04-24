@@ -13,32 +13,27 @@ stockfish = Stockfish(path=stockfish_path)
 
 # Maia(s)
 leela_path = "../bin/lc0"
-maias = {}
+maias = None
 
-for i in range(11, 20):
-    rating = i * 100
-    weights_path = "../maia_weights/maia-1100.pb.gz"
-    maias[rating] = Maia(leela_path, weights_path)
+def instantiate_maias():
+    global maias
+    maias = {}
+    for i in range(11, 20):
+        rating = i * 100
+        weights_path = "../maia_weights/maia-1100.pb.gz"
+        maias[rating] = Maia(leela_path, weights_path)
+
+instantiate_maias()
 
 def run_engine(fen, i):
     if i == 13:
         raise StockfishException("Simulated stockfish exception")
     
-    start_time = time.time()
-    
-    # segments = fen.split(",")
-    # if len(segments) == 2:
-    #     skill_level = int(segments[1])
-    # else:
-    #     skill_level = 20
-    # stockfish.set_skill_level(skill_level)
-
     segments = fen.split(",")
     fen = segments[0]
+    log(f"segments: {segments}")
 
     engine = None
-
-    log(f"segments: {segments}")
 
     # fen, elo, depth => Stockfish with limited elo & depth
     if len(segments) == 3:
@@ -63,25 +58,22 @@ def run_engine(fen, i):
         engine = stockfish
 
     engine.set_fen_position(fen)
-    engine_output = engine.get_best_move()
 
+    start_time = time.time()
+    engine_output = engine.get_best_move()
     end_time = time.time()
     log(f"#{i} Engine calculation time: {end_time - start_time}")
-
-    ### Maia Testing
-    # print(f"fen: {fen}")
-    # maia.set_fen_position(fen)
-    # maia_best_move = maia.get_best_move()
-    # print(f"maia_best_move: {maia_best_move}")
     
     return engine_output
 
-def re_instantiate_engine():
-    log(f"Reinstantiated engine")
+def re_instantiate_engines():
+    log(f"Reinstantiate engines")
     global stockfish, maia
     stockfish = Stockfish(path=stockfish_path)
+    del maias
+    instantiate_maias()
 
 def shutdown_engines():
-    global stockfish, maia
+    global stockfish, maias
     del stockfish
-    del maia
+    del maias
