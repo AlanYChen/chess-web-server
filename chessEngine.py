@@ -21,10 +21,20 @@ def run_engine(fen, i):
     #     skill_level = 20
     # stockfish.set_skill_level(skill_level)
 
-    stockfish.update_engine_parameters(
-        {"UCI_LimitStrength": "true", "UCI_Elo": 1350}
-    )
-    stockfish.set_depth(2)
+    segments = fen.split(",")
+    if len(segments) == 3:
+        elo = int(segments[1])
+        depth = int(segments[2])
+
+        stockfish.update_engine_parameters(
+            {"UCI_LimitStrength": "true", "UCI_Elo": elo}
+        )
+        stockfish.set_depth(depth)
+    else:
+        stockfish.update_engine_parameters(
+            {"UCI_LimitStrength": "false"}
+        )
+        stockfish.set_depth(15)
 
     stockfish.set_fen_position(fen)
 
