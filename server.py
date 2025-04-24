@@ -54,4 +54,3 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         accept_connections_from_clients(server_socket)
     finally:
         shutdown_engines()
-   

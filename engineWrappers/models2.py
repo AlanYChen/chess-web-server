@@ -11,25 +11,7 @@ class Maia:
 
     _del_counter = 0 # Used in test_models: will count how many times the del function is called.
 
-    def __init__(
-        self, leela_path: str, weights_path:str, parameters: dict = None
-    ) -> None:
-        self._DEFAULT_PARAMS = {
-            "Debug Log File": "",
-            "Contempt": 0,
-            "Min Split Depth": 0,
-            "Threads": 1,
-            "Ponder": "false",
-            "Hash": 16,
-            "MultiPV": 1,
-            "Skill Level": 20,
-            "Move Overhead": 10,
-            "Minimum Thinking Time": 20,
-            "Slow Mover": 100,
-            "UCI_Chess960": "false",
-            "UCI_LimitStrength": "false",
-            "UCI_Elo": 1350,
-        }
+    def __init__(self, leela_path: str, weights_path: str) -> None:
         self._process = subprocess.Popen(
             [leela_path, "--weights=" + weights_path],
             universal_newlines=True,
@@ -95,9 +77,6 @@ class Maia:
             self._set_option(name, value, True)
         self.set_fen_position(self.get_fen_position(), False)
         # Getting SF to set the position again, since UCI option(s) have been updated.
-
-    def reset_engine_parameters(self) -> None:
-        self.update_engine_parameters(self._DEFAULT_PARAMS)
 
     def _set_option(
         self, name: str, value: Any, update_parameters_attribute: bool = True
