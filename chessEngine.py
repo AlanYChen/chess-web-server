@@ -63,6 +63,7 @@ def run_engine(fen, i):
     log(f"#{i} Engine calculation time: {end_time - start_time}")
 
     ### Maia Testing
+    print(f"fen: {fen}")
     maia.set_fen_position(fen)
     maia_best_move = maia.get_best_move()
     print(f"maia_best_move: {maia_best_move}")
