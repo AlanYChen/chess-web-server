@@ -1,18 +1,31 @@
-from stockfishPython import Stockfish, StockfishException
+from engineWrappers import Stockfish, StockfishException, Maia, MaiaException
 import platform
 import time
 from logger import log
 
 system = platform.system()
 
-executable_name = "stockfish" if system == "Linux" else "stockfish.exe"
-executable_path = ("../bin/" + executable_name)
+# Stockfish
+stockfish_executable_name = "stockfish" if system == "Linux" else "stockfish.exe"
+stockfish_path = ("../bin/" + stockfish_executable_name)
 
-stockfish = Stockfish(path=executable_path)
+stockfish = Stockfish(path=stockfish_path)
+
+# Maia
+leela_path = "../bin/lc0"
+weights_path = "../bin/maia_weights/"
+
+maia = Maia(leela_path=leela_path, weights_path=weights_path)
 
 def run_engine(fen, i):
     if i == 13:
         raise StockfishException("Simulated stockfish exception")
+    
+    ### Maia Testing
+    maia.set_fen_position(fen)
+    maia_best_move = maia.get_best_move()
+    print(f"maia_best_move: {maia_best_move}")
+    ###
     
     # segments = fen.split(",")
     # if len(segments) == 2:

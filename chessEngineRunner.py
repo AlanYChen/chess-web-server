@@ -1,4 +1,4 @@
-from stockfishPython import StockfishException
+from engineWrappers import StockfishException
 from chessEngine import run_engine
 from logger import log
 
