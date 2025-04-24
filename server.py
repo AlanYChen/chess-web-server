@@ -6,7 +6,15 @@ from chessEngine import re_instantiate_engine
 PORT = 8000
 
 def respond_to_client(client_socket):
-    request = client_socket.recv(1024).decode()
+    try:
+        request = client_socket.recv(1024).decode()
+    except UnicodeDecodeError as e:
+        print(f"UnicodeDecodeError: {e}")
+
+        response = 'HTTP/1.1 200 OK\n\n' + "fullErr"
+        client_socket.sendall(response.encode())
+        return False
+    
     # log(f"From client:\n{request}")
 
     total_engine_output = get_total_engine_output(request)
@@ -15,8 +23,8 @@ def respond_to_client(client_socket):
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
     client_socket.sendall(response.encode())
 
-    error_occurred = (total_engine_output[-3:] == "err")
-    return error_occurred
+    engine_error = (total_engine_output[-3:] == "err")
+    return engine_error
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
@@ -33,10 +41,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
 
         with client_socket:
             start_time = time.time()
-            error_occurred = respond_to_client(client_socket)
+            engine_error = respond_to_client(client_socket)
             end_time = time.time()
             log(f"Total server response time: {end_time - start_time}\n")
 
-        log(f"error_occurred: {error_occurred}")
-        if error_occurred:
+        if engine_error:
+            log(f"engine_error: {engine_error}")
             re_instantiate_engine()

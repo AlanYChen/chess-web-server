@@ -25,14 +25,15 @@ def run_engine(fen, i):
     if len(segments) == 3:
         elo = int(segments[1])
         depth = int(segments[2])
+        multiPV = int(segments[3])
 
         stockfish.update_engine_parameters(
-            {"UCI_LimitStrength": "true", "UCI_Elo": elo}
+            {"UCI_LimitStrength": "true", "UCI_Elo": elo, "MultiPV": multiPV}
         )
         stockfish.set_depth(depth)
     else:
         stockfish.update_engine_parameters(
-            {"UCI_LimitStrength": "false"}
+            {"UCI_LimitStrength": "false", "MultiPV": 1}
         )
         stockfish.set_depth(15)
 
