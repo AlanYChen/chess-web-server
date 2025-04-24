@@ -1,7 +1,7 @@
 import socket, time
 from logger import log
 from chessEngineRunner import get_total_engine_output
-from chessEngine import re_instantiate_engine
+from chessEngine import re_instantiate_engine, shutdown_engines
 
 PORT = 8000
 
@@ -48,3 +48,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         if engine_error:
             log(f"engine_error: {engine_error}")
             re_instantiate_engine()
+
+shutdown_engines()
