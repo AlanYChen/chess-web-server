@@ -80,4 +80,6 @@ def re_instantiate_engines():
 
 def shutdown_engines():
     global stockfish, maias
+    for elo in maias:
+        del maias[elo]
     del stockfish, maias
