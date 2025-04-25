@@ -1,4 +1,5 @@
 import socket, time
+from datetime import datetime
 from logger import log
 from chessEngineRunner import get_total_engine_output
 from chessEngine import re_instantiate_engines, shutdown_engines
@@ -15,7 +16,8 @@ def respond_to_client(client_socket):
         client_socket.sendall(response.encode())
         return False
     
-    log(f"From client:\n{request}")
+    log(f"From client at {datetime.now().astimezone()}:")
+    log(f"{request}")
 
     total_engine_output = get_total_engine_output(request)
     log(f"total_engine_output: {total_engine_output}")
