@@ -20,14 +20,16 @@ def instantiate_maias():
     maias = {}
     for i in range(11, 20):
         rating = i * 100
-        weights_path = "../maia_weights/maia-1100.pb.gz"
+        weights_path = "../maia_weights/maia-" + str(rating) + ".pb.gz"
         maias[rating] = Maia(leela_path, weights_path)
 
 instantiate_maias()
 
 def run_engine(fen, i):
-    if i == 13:
-        raise ChessEngineException("Simulated chess engine exception")
+    # if i == 13:
+    #     raise ChessEngineException("Simulated chess engine exception")
+    
+    start_time = time.time()
     
     segments = fen.split(",")
     fen = segments[0]
@@ -49,9 +51,16 @@ def run_engine(fen, i):
     # fen, elo => Maia with specific elo
     elif len(segments) == 2:
         elo = int(segments[1])
-        if not elo in maias:
-            raise ChessEngineImproperInputException(str(elo) + ": not valid elo for Maia")
-        engine = maias[elo]
+        # if not elo in maias:
+        #     raise ChessEngineImproperInputException(str(elo) + ": not valid elo for Maia")
+        # engine = maias[elo]
+        maia_creation_start_time = time.time()
+        
+        weights_path = "../maia_weights/maia-" + str(elo) + ".pb.gz"
+        engine = Maia(leela_path, weights_path)
+
+        maia_creation_end_time = time.time()
+        log(f"Maia creation time: {maia_creation_end_time - maia_creation_start_time}")
     else:
         stockfish.update_engine_parameters(
             {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100, "Minimum Thinking Time": 20}
@@ -61,7 +70,7 @@ def run_engine(fen, i):
 
     engine.set_fen_position(fen)
 
-    start_time = time.time()
+    
     engine_output = engine.get_best_move()
     end_time = time.time()
     log(f"#{i} Engine calculation time: {end_time - start_time}")
