@@ -15,7 +15,7 @@ def respond_to_client(client_socket):
         client_socket.sendall(response.encode())
         return False
     
-    # log(f"From client:\n{request}")
+    log(f"From client:\n{request}")
 
     total_engine_output = get_total_engine_output(request)
     log(f"total_engine_output: {total_engine_output}")
