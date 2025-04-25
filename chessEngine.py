@@ -20,7 +20,7 @@ def instantiate_maias():
     maias = {}
     for i in range(11, 20):
         rating = i * 100
-        weights_path = "../maia_weights/maia-" + str(rating) + ".pb.gz"
+        weights_path = "maia_weights/maia-" + str(rating) + ".pb.gz"
         maias[rating] = Maia(leela_path, weights_path)
 
 instantiate_maias()
@@ -39,8 +39,7 @@ def run_engine(fen, i):
 
     # fen, elo, depth => Stockfish with limited elo & depth
     if len(segments) == 3:
-        elo = int(segments[1])
-        depth = int(segments[2])
+        elo, depth = int(segments[1]), int(segments[2])
 
         stockfish.update_engine_parameters(
             {"UCI_LimitStrength": "true", "UCI_Elo": elo, "Slow Mover": 0, "Minimum Thinking Time": 0}
@@ -51,16 +50,17 @@ def run_engine(fen, i):
     # fen, elo => Maia with specific elo
     elif len(segments) == 2:
         elo = int(segments[1])
-        # if not elo in maias:
-        #     raise ChessEngineImproperInputException(str(elo) + ": not valid elo for Maia")
-        # engine = maias[elo]
-        maia_creation_start_time = time.time()
-        
-        weights_path = "../maia_weights/maia-" + str(elo) + ".pb.gz"
-        engine = Maia(leela_path, weights_path)
+        if not elo in maias:
+            raise ChessEngineImproperInputException(str(elo) + ": not valid elo for Maia")
+        engine = maias[elo]
 
-        maia_creation_end_time = time.time()
-        log(f"Maia creation time: {maia_creation_end_time - maia_creation_start_time}")
+        # maia_creation_start_time = time.time()
+
+        # weights_path = "maia_weights/maia-" + str(elo) + ".pb.gz"
+        # engine = Maia(leela_path, weights_path)
+
+        # maia_creation_end_time = time.time()
+        # log(f"Maia creation time: {maia_creation_end_time - maia_creation_start_time}")
     else:
         stockfish.update_engine_parameters(
             {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100, "Minimum Thinking Time": 20}
@@ -70,7 +70,6 @@ def run_engine(fen, i):
 
     engine.set_fen_position(fen)
 
-    
     engine_output = engine.get_best_move()
     end_time = time.time()
     log(f"#{i} Engine calculation time: {end_time - start_time}")
