@@ -5,6 +5,8 @@ import time
 
 def get_total_engine_output(request):
     fens = get_fens(request)
+    if fens is None:
+        return "fullErr"
 
     engine_outputs = []
     for i, fen in enumerate(fens):
@@ -30,8 +32,7 @@ def get_total_engine_output(request):
 
 def get_fens(request):
     lines = request.splitlines()
-
     for i, line in enumerate(lines):
         if line == '':
             return lines[i + 1:]
-    raise ValueError("get_fens received a request with no empty line")
+    return None
