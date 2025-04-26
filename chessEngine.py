@@ -10,7 +10,7 @@ stockfish_path = "bin/stockfish"
 stockfish = Stockfish(path=stockfish_path)
 
 # Maia(s)
-leela_path = "bin/lc0"
+leela_path = "bin/lc0-dir/bin"
 maias = None
 
 def instantiate_maias():
