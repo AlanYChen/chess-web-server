@@ -15,15 +15,10 @@ is_stockfish_server = False # For testing
 def instantiate_maias():
     global maias
     maias = {}
-    # for i in range(11, 20):
-    #     rating = i * 100
-        # weights_path = "../bin/lc0-dir/maia_weights/maia-" + str(rating) + ".pb.gz"
-        # maias[rating] = Maia(LEELA_PATH, weights_path)
-    weights_path = "../bin/lc0-dir/leela-weights.pb.gz"
-    test_engine = Maia(LEELA_PATH, weights_path)
     for i in range(11, 20):
         rating = i * 100
-        maias[rating] = test_engine
+        weights_path = "../bin/lc0-dir/maia_weights/maia-" + str(rating) + ".pb.gz"
+        maias[rating] = Maia(LEELA_PATH, weights_path)
 
 if is_stockfish_server:
     stockfish = Stockfish(path=STOCKFISH_PATH)
