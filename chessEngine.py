@@ -59,6 +59,7 @@ def run_engine(fen, i):
 
         maia_creation_end_time = time.time()
         log(f"Maia creation time: {maia_creation_end_time - maia_creation_start_time}")
+        using_maia = True
     else:
         stockfish.update_engine_parameters(
             {"UCI_LimitStrength": "false", "MultiPV": 1, "Slow Mover": 100, "Minimum Thinking Time": 20}
@@ -69,6 +70,9 @@ def run_engine(fen, i):
     engine.set_fen_position(fen)
 
     engine_output = engine.get_best_move()
+    if using_maia:
+        del engine
+
     end_time = time.time()
     log(f"#{i} Engine calculation time: {end_time - start_time}")
     
