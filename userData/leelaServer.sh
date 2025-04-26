@@ -8,7 +8,7 @@ sudo apt-get install -y libopenblas-dev # OpenBLAS is needed as a backend for wh
 
 git clone https://github.com/AlanYChen/chess-web-server-leela.git
 mv chess-web-server-leela/lc0-dir bin/lc0-dir
-rmdir chess-web-server-leela
+rm -rf chess-web-server-leela
 
 git clone https://github.com/AlanYChen/chess-web-server.git
 cd chess-web-server

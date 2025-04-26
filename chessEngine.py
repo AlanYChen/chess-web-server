@@ -10,7 +10,6 @@ stockfish = None
 maias = None
 
 is_stockfish_server =  os.path.exists("../bin/stockfish")
-is_stockfish_server = False # For testing
 
 def instantiate_maias():
     global maias

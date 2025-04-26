@@ -7,7 +7,7 @@ mkdir bin
 
 git clone https://github.com/AlanYChen/chess-web-server-stockfish.git
 mv chess-web-server-stockfish/stockfish bin/stockfish
-rmdir chess-web-server-stockfish
+rm -rf chess-web-server-stockfish
 
 git clone https://github.com/AlanYChen/chess-web-server.git
 cd chess-web-server
