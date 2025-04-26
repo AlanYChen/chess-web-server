@@ -34,6 +34,7 @@ def run_engine(fen, i):
     log(f"segments: {segments}")
 
     engine = None
+    using_maia = False
 
     # fen, elo, depth => Stockfish with limited elo & depth
     if len(segments) == 3:
