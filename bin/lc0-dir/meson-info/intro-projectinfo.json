@@ -1,1 +1,0 @@
-{"version": "undefined", "descriptive_name": "lc0", "subproject_dir": "subprojects", "subprojects": [{"name": "eigen", "version": "3.3.7", "descriptive_name": "eigen"}, {"name": "zlib", "version": "1.2.11", "descriptive_name": "zlib"}, {"name": "gtest", "version": "1.10.0", "descriptive_name": "gtest"}]}

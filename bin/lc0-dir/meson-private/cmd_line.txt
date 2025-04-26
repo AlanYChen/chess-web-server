@@ -1,6 +1,0 @@
-[options]
-prefix = /usr/local
-buildtype = release
-
-[properties]
-

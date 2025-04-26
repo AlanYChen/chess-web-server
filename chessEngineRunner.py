@@ -1,6 +1,7 @@
 from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
 from chessEngine import run_engine
 from logger import log
+import time
 
 def get_total_engine_output(request):
     fens = get_fens(request)
@@ -8,7 +9,9 @@ def get_total_engine_output(request):
     engine_outputs = []
     for i, fen in enumerate(fens):
         try:
-            engine_outputs.append(run_engine(fen, i))
+            start_time = time.time()
+            engine_outputs.append(run_engine(fen))
+            log(f"#{i} Engine execution time: {time.time() - start_time}")
         except ChessEngineException as e:
             log(f"ChessEngineException: {e}")
             for j in range(i, len(fens)):
@@ -17,6 +20,9 @@ def get_total_engine_output(request):
             break
         except ChessEngineImproperInputException as e:
             log(f"ChessEngineImproperInputException: {e}")
+            engine_outputs.append("err")
+        except Exception as e:
+            log(f"Exception: {e}")
             engine_outputs.append("err")
     
     total_engine_output = ','.join(engine_outputs)
