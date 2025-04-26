@@ -16,7 +16,7 @@ def respond_to_client(client_socket):
         client_socket.sendall(response.encode())
         return False
     
-    log(f"From client at {datetime.now().astimezone()}:")
+    log(f"From client at {datetime.now().strftime("%m-%d %H:%M")}:")
     log(f"{request}")
 
     total_engine_output = get_total_engine_output(request)

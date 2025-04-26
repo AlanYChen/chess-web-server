@@ -6,13 +6,11 @@ from logger import log
 system = platform.system()
 
 # Stockfish
-stockfish_executable_name = "stockfish" if system == "Linux" else "stockfish.exe"
-stockfish_path = ("../bin/" + stockfish_executable_name)
-
+stockfish_path = "bin/stockfish"
 stockfish = Stockfish(path=stockfish_path)
 
 # Maia(s)
-leela_path = "../bin/lc0"
+leela_path = "bin/lc0"
 maias = None
 
 def instantiate_maias():
