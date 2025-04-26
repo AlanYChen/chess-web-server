@@ -1,3 +1,6 @@
+#!/bin/bash
+
+echo "Starting"
 # This userdata version compiles engines from scratch
 
 cd /home/ubuntu
