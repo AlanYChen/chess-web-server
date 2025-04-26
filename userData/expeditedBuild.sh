@@ -4,6 +4,20 @@ echo "Starting"
 # This userdata version doesn't compile engines from scratch;
 # just downloads the engine binaries from the github
 
+# Swap file
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo "/swapfile none swap sw 0 0" >> /etc/fstab
+
+sudo sysctl vm.swappiness=10
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+
+#
+
+
 cd /home/ubuntu
 apt update
 apt upgrade
