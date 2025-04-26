@@ -57,12 +57,12 @@ def run_engine(fen):
     return engine.get_best_move()
 
 def re_instantiate_engines():
+    global stockfish, maias
     if stockfish is not None:
-        global stockfish
+        
         del stockfish
         stockfish = Stockfish(path=STOCKFISH_PATH)
     if maias is not None:
-        global maias
         for elo in list(maias.keys()):
             del maias[elo]
         del maias
@@ -72,6 +72,9 @@ def re_instantiate_engines():
 
 def shutdown_engines():
     global stockfish, maias
-    for elo in list(maias.keys()):
-        del maias[elo]
-    del stockfish, maias
+    if stockfish is not None:
+        del stockfish
+    if maias is not None:
+        for elo in list(maias.keys()):
+            del maias[elo]
+        del maias
