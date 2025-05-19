@@ -317,17 +317,14 @@ class Stockfish:
             {"UCI_LimitStrength": "true", "UCI_Elo": elo_rating}
         )
 
-    def get_best_move(self, wtime: int = None, btime: int = None) -> Optional[str]:
+    def get_best_move(self) -> Optional[str]:
         """Returns best move with current position on the board.
         wtime and btime arguments influence the search only if provided.
 
         Returns:
             A string of move in algebraic notation or None, if it's a mate now.
         """
-        if wtime is not None or btime is not None:
-            self._go_remaining_time(wtime, btime)
-        else:
-            self._go()
+        self._go()
         return self._get_best_move_from_sf_popen_process()
 
     def get_best_move_time(self, time: int = 1000) -> Optional[str]:

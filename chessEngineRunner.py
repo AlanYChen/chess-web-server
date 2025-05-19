@@ -1,15 +1,21 @@
 from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
-from chessEngine import run_engine
-from logger import log
+from chessEngine import run_engine, re_instantiate_engines
+from utils.logger import log
+from utils.fen import is_fen_syntax_valid
 import time
 
-def get_total_engine_output(request):
-    fens = get_fens(request)
+def get_total_engine_output(request_lines):
+    fens = get_fens(request_lines)
     if fens is None:
         return "fullErr"
 
     engine_outputs = []
     for i, fen in enumerate(fens):
+        if not is_fen_syntax_valid(fen):
+            log(f"Invalid fen: {fen}")
+            engine_outputs.append("err")
+            continue
+
         try:
             start_time = time.time()
             engine_outputs.append(run_engine(fen))
@@ -17,8 +23,8 @@ def get_total_engine_output(request):
         except ChessEngineException as e:
             log(f"ChessEngineException: {e}")
             for j in range(i, len(fens)):
-                log(f"Append err: {j}")
                 engine_outputs.append("err")
+            re_instantiate_engines()
             break
         except ChessEngineImproperInputException as e:
             log(f"ChessEngineImproperInputException: {e}")
@@ -30,9 +36,7 @@ def get_total_engine_output(request):
     total_engine_output = ','.join(engine_outputs)
     return total_engine_output
 
-def get_fens(request):
-    lines = request.splitlines()
-    for i, line in enumerate(lines):
+def get_fens(request_lines):
+    for i, line in enumerate(request_lines):
         if line == '':
-            return lines[i + 1:]
-    return None
+            return request_lines[i + 1:]

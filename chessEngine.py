@@ -1,15 +1,19 @@
 from engineWrappers import Stockfish, Maia
 from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
-from logger import log
-import os
+from utils.logger import log
+import os, sys
 
-STOCKFISH_PATH = "../bin/stockfish"
+if sys.platform == "win32":
+    STOCKFISH_PATH = "../bin/stockfish.exe"
+else:
+    STOCKFISH_PATH = "../bin/stockfish"
+
 LEELA_PATH = "../bin/lc0-dir/lc0"
 
 stockfish = None
 maias = None
 
-is_stockfish_server =  os.path.exists("../bin/stockfish")
+is_stockfish_server =  os.path.exists(STOCKFISH_PATH)
 
 def instantiate_maias():
     global maias
@@ -78,3 +82,4 @@ def shutdown_engines():
         for elo in list(maias.keys()):
             del maias[elo]
         del maias
+
