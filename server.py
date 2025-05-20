@@ -16,7 +16,6 @@ def respond_to_client(client_socket):
         return
     except ConnectionResetError as e:
         print(f"Connection reset by peer: {e}")
-        sendHttpError(client_socket)
         return
     
     log(f"From client at {datetime.now().strftime("%m-%d %H:%M")}:")
