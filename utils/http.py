@@ -6,6 +6,8 @@ def sendHttpError(client_socket):
     client_socket.sendall(response.encode())
 
 def checkHttpRequest(request_lines):
+    if len(request_lines) == 0:
+        return False
     if request_lines[0] != "POST / HTTP/1.1":
         return False
     
