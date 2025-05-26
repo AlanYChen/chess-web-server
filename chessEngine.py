@@ -1,6 +1,7 @@
 from engineWrappers import Stockfish, Maia
 from engineWrappers.chessRelatedExceptions import ChessEngineException, ChessEngineImproperInputException
 from utils.logger import log
+from utils.fen import is_fen_syntax_valid
 import os, sys
 
 if sys.platform == "win32":
@@ -28,9 +29,12 @@ if is_stockfish_server:
 else:
     instantiate_maias()
 
-def run_engine(fen):
-    segments = fen.split(",")
+def run_engine(input_line):
+    segments = input_line.split(",")
     fen = segments[0]
+    if not is_fen_syntax_valid(fen):
+        log(f"Invalid fen: {fen}")
+        return "err"
 
     engine = None
 
