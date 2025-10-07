@@ -18,7 +18,7 @@ def log(msg):
         filename = "logs/" + current_thread_name + "_log.txt"
         os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-        with open(filename, "w") as f:
+        with open(filename, "a") as f:
             sys.stdout = f
             print(msg)
     finally:
