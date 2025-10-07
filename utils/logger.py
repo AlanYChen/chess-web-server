@@ -5,6 +5,9 @@ import shutil
 
 _LOGGING = True
 
+# Reset logs at start of the program
+shutil.rmtree("logs")
+
 def log(msg):
     if not _LOGGING:
         return
@@ -16,7 +19,6 @@ def log(msg):
     try:
         current_thread_name = threading.current_thread().name
 
-        shutil.rmtree("logs")
 
         filename = "logs/" + current_thread_name + "_log.txt"
         os.makedirs(os.path.dirname(filename), exist_ok=True)
