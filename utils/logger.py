@@ -15,7 +15,7 @@ def log(msg):
     try:
         current_thread_name = threading.current_thread().name
 
-        filename = "~/logs/" + current_thread_name + "_log.txt"
+        filename = "logs/" + current_thread_name + "_log.txt"
         os.makedirs(os.path.dirname(filename), exist_ok=True)
 
         with open(filename, "w") as f:
