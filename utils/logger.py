@@ -14,7 +14,7 @@ def log(msg):
     try:
         current_thread_name = threading.current_thread().name
 
-        with open(current_thread_name + "_log.txt", "w") as f:
+        with open("~/logs/" + current_thread_name + "_log.txt", "w") as f:
             sys.stdout = f
             print(msg)
     finally:
