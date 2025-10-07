@@ -31,6 +31,7 @@ def respond_to_client(client_socket):
 
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
     client_socket.sendall(response.encode())
+    client_socket.close()
 
 def accept_connections_from_clients(server_socket):
      while True:
