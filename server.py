@@ -1,4 +1,4 @@
-import socket, time
+import socket, time, threading
 from datetime import datetime
 from utils.logger import log
 from utils.http import checkHttpRequest, sendHttpError
@@ -42,7 +42,10 @@ def accept_connections_from_clients(server_socket):
 
         with client_socket:
             start_time = time.time()
-            respond_to_client(client_socket)
+
+            client_handler = threading.Thread(target=respond_to_client, args=(client_socket))
+            client_handler.start()
+
             end_time = time.time()
             log(f"Total server response time: {end_time - start_time}\n")
 
