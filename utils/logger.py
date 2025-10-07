@@ -1,5 +1,6 @@
 import sys
 import threading
+import os
 
 _LOGGING = True
 
@@ -14,7 +15,10 @@ def log(msg):
     try:
         current_thread_name = threading.current_thread().name
 
-        with open("~/logs/" + current_thread_name + "_log.txt", "w") as f:
+        filename = "~/logs/" + current_thread_name + "_log.txt"
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+
+        with open(filename, "w") as f:
             sys.stdout = f
             print(msg)
     finally:
