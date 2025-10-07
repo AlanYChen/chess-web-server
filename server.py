@@ -43,7 +43,7 @@ def accept_connections_from_clients(server_socket):
         with client_socket:
             start_time = time.time()
 
-            client_handler = threading.Thread(target=respond_to_client, args=(client_socket))
+            client_handler = threading.Thread(target=respond_to_client, args=(client_socket, ))
             client_handler.start()
 
             end_time = time.time()
