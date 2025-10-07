@@ -40,14 +40,13 @@ def accept_connections_from_clients(server_socket):
             print("Exiting")
             break
 
-        with client_socket:
-            start_time = time.time()
+        start_time = time.time()
 
-            client_handler = threading.Thread(target=respond_to_client, args=(client_socket, ))
-            client_handler.start()
+        client_handler = threading.Thread(target=respond_to_client, args=(client_socket, ))
+        client_handler.start()
 
-            end_time = time.time()
-            log(f"Total server response time: {end_time - start_time}\n")
+        end_time = time.time()
+        log(f"Total server response time: {end_time - start_time}\n")
 
 def run_server():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
