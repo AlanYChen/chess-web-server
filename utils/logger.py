@@ -8,7 +8,7 @@ def log(msg):
     if not _LOGGING:
         return
     
-    print(msg)
+    # print(msg)
 
     # Write to file as well
     original_stdout = sys.stdout
