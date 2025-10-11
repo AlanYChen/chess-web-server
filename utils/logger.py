@@ -1,4 +1,3 @@
-import sys
 import threading
 import os
 import shutil
@@ -19,23 +18,17 @@ def log(msg):
         return
     
     # Write to file as well
-    original_stdout = sys.stdout
-    try:
-        current_thread_name = threading.current_thread().name
+    current_thread_name = threading.current_thread().name
 
-        filename = LOGS_DIRECTORY_PATH + "/" + current_thread_name + "_log.txt"
+    filename = LOGS_DIRECTORY_PATH + "/" + current_thread_name + "_log.txt"
 
-        with open(filename, "a") as f:
-            sys.stdout = f
-            print(msg)
-
-    finally:
-        sys.stdout = original_stdout
+    with open(filename, "a") as f:
+        print(msg, file=f)
 
 # Autoclear logs
 def remove_old_log_files():
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=OLD_THRESHOLD)
-    cutoff_time = datetime.datetime.now() - datetime.timedelta(minutes=1) # TESTING
+    cutoff_time = datetime.datetime.now() - datetime.timedelta(seconds = 8) # TESTING
 
     for filename in os.listdir(LOGS_DIRECTORY_PATH):
         file_path = os.path.join(LOGS_DIRECTORY_PATH, filename)
