@@ -8,11 +8,13 @@ _LOGGING = True
 LOGS_DIRECTORY_PATH = "logs"
 OLD_THRESHOLD = 3
 
-# Reset logs at start of the program
-shutil.rmtree("logs")
+# Clear the logs entirely upon start of the program
+if os.path.exists(LOGS_DIRECTORY_PATH):
+    shutil.rmtree(LOGS_DIRECTORY_PATH)
 
 def remove_old_log_files():
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=OLD_THRESHOLD)
+    cutoff_time = datetime.datetime.now() - datetime.timedelta(minutes=2) # TESTING
 
     for filename in os.listdir(LOGS_DIRECTORY_PATH):
         file_path = os.path.join(LOGS_DIRECTORY_PATH, filename)
@@ -43,7 +45,7 @@ def log(msg):
         with open(filename, "a") as f:
             sys.stdout = f
             print(msg)
+            remove_old_log_files()
+
     finally:
         sys.stdout = original_stdout
-
-    remove_old_log_files()
