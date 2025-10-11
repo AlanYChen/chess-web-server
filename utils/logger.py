@@ -5,8 +5,8 @@ import datetime
 
 _LOGGING = True
 LOGS_DIRECTORY_PATH = "logs"
-OLD_THRESHOLD = 3
-LOG_CLEARING_INTERVAL = 3 # Given in seconds
+OLD_THRESHOLD = 2
+LOG_CLEARING_INTERVAL = 30 # Given in seconds
 
 # Clear the logs entirely upon start of the program
 if os.path.exists(LOGS_DIRECTORY_PATH):
@@ -28,7 +28,6 @@ def log(msg):
 # Autoclear logs
 def remove_old_log_files():
     cutoff_time = datetime.datetime.now() - datetime.timedelta(days=OLD_THRESHOLD)
-    cutoff_time = datetime.datetime.now() - datetime.timedelta(seconds = 8) # TESTING
 
     for filename in os.listdir(LOGS_DIRECTORY_PATH):
         file_path = os.path.join(LOGS_DIRECTORY_PATH, filename)
@@ -40,9 +39,8 @@ def remove_old_log_files():
         if modification_datetime < cutoff_time:
             try:
                 os.remove(file_path)
-                print(f"Removed: {file_path}")
             except OSError as e:
-                print(f"Error removing {file_path}: {e}")
+                log(f"Error removing {file_path}: {e}")
 
     threading.Timer(LOG_CLEARING_INTERVAL, remove_old_log_files).start()
 
