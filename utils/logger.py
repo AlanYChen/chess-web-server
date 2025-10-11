@@ -7,28 +7,11 @@ import datetime
 _LOGGING = True
 LOGS_DIRECTORY_PATH = "logs"
 OLD_THRESHOLD = 3
+LOG_CLEARING_INTERVAL = 3 # Given in seconds
 
 # Clear the logs entirely upon start of the program
 if os.path.exists(LOGS_DIRECTORY_PATH):
     shutil.rmtree(LOGS_DIRECTORY_PATH)
-
-def remove_old_log_files():
-    cutoff_time = datetime.datetime.now() - datetime.timedelta(days=OLD_THRESHOLD)
-    cutoff_time = datetime.datetime.now() - datetime.timedelta(minutes=2) # TESTING
-
-    for filename in os.listdir(LOGS_DIRECTORY_PATH):
-        file_path = os.path.join(LOGS_DIRECTORY_PATH, filename)
-        if not os.path.isfile(file_path): continue
-
-        modification_timestamp = os.path.getmtime(file_path)
-        modification_datetime = datetime.datetime.fromtimestamp(modification_timestamp)
-
-        if modification_datetime < cutoff_time:
-            try:
-                os.remove(file_path)
-                print(f"Removed: {file_path}")
-            except OSError as e:
-                print(f"Error removing {file_path}: {e}")
 
 def log(msg):
     if not _LOGGING:
@@ -45,7 +28,29 @@ def log(msg):
         with open(filename, "a") as f:
             sys.stdout = f
             print(msg)
-            remove_old_log_files()
 
     finally:
         sys.stdout = original_stdout
+
+# Autoclear logs
+def remove_old_log_files():
+    cutoff_time = datetime.datetime.now() - datetime.timedelta(days=OLD_THRESHOLD)
+    cutoff_time = datetime.datetime.now() - datetime.timedelta(minutes=1) # TESTING
+
+    for filename in os.listdir(LOGS_DIRECTORY_PATH):
+        file_path = os.path.join(LOGS_DIRECTORY_PATH, filename)
+        if not os.path.isfile(file_path): continue
+
+        modification_timestamp = os.path.getmtime(file_path)
+        modification_datetime = datetime.datetime.fromtimestamp(modification_timestamp)
+
+        if modification_datetime < cutoff_time:
+            try:
+                os.remove(file_path)
+                print(f"Removed: {file_path}")
+            except OSError as e:
+                print(f"Error removing {file_path}: {e}")
+
+    threading.Timer(LOG_CLEARING_INTERVAL, remove_old_log_files).start()
+    
+threading.Timer(LOG_CLEARING_INTERVAL, remove_old_log_files).start()
