@@ -12,6 +12,7 @@ LOG_CLEARING_INTERVAL = 3 # Given in seconds
 # Clear the logs entirely upon start of the program
 if os.path.exists(LOGS_DIRECTORY_PATH):
     shutil.rmtree(LOGS_DIRECTORY_PATH)
+os.mkdir(LOGS_DIRECTORY_PATH)
 
 def log(msg):
     if not _LOGGING:
@@ -23,7 +24,6 @@ def log(msg):
         current_thread_name = threading.current_thread().name
 
         filename = LOGS_DIRECTORY_PATH + "/" + current_thread_name + "_log.txt"
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
 
         with open(filename, "a") as f:
             sys.stdout = f
@@ -52,5 +52,5 @@ def remove_old_log_files():
                 print(f"Error removing {file_path}: {e}")
 
     threading.Timer(LOG_CLEARING_INTERVAL, remove_old_log_files).start()
-    
+
 threading.Timer(LOG_CLEARING_INTERVAL, remove_old_log_files).start()
