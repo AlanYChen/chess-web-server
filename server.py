@@ -6,6 +6,7 @@ from chessEngineRunner import get_total_engine_output
 from chessEngine import shutdown_engines
 
 PORT = 8000
+engine_lock = threading.Lock()
 
 def respond_to_client(client_socket):
     try:
@@ -25,8 +26,9 @@ def respond_to_client(client_socket):
     if checkHttpRequest(request_lines) == False:
         sendHttpError(client_socket)
         return
-
-    total_engine_output = get_total_engine_output(request_lines)
+    
+    with engine_lock:
+        total_engine_output = get_total_engine_output(request_lines)
     log(f"total_engine_output: {total_engine_output}")
 
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
