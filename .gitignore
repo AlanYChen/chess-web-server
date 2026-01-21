@@ -1,2 +1,4 @@
 __pycache__/
 stockfishPython/__pycache__/
+server-output.log
+logs/
