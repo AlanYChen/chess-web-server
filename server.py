@@ -31,9 +31,11 @@ def respond_to_client(client_socket):
     
     # 2026-01-21: Encountered issue where at a specific point threads stop getting to the point
     # where they're using the engine; I hypothesize a thread is getting stuck somehow and locking up the lock indefinitely.
+    global engine_lock
     acquire_success = engine_lock.acquire(True, LOCK_TIMEOUT)
     if not acquire_success:
         re_instantiate_engines()
+
         engine_lock = threading.Lock()
         sendHttpError(client_socket)
         return
