@@ -3,9 +3,11 @@ from datetime import datetime
 from utils.logger import log
 from utils.http import checkHttpRequest, sendHttpError
 from chessEngineRunner import get_total_engine_output
-from chessEngine import shutdown_engines
+from chessEngine import shutdown_engines, re_instantiate_engines
 
 PORT = 8000
+LOCK_TIMEOUT = 8
+
 engine_lock = threading.Lock()
 
 def respond_to_client(client_socket):
@@ -27,8 +29,19 @@ def respond_to_client(client_socket):
         sendHttpError(client_socket)
         return
     
-    with engine_lock:
+    # 2026-01-21: Encountered issue where at a specific point threads stop getting to the point
+    # where they're using the engine; I hypothesize a thread is getting stuck somehow and locking up the lock indefinitely.
+    acquire_success = engine_lock.acquire(True, LOCK_TIMEOUT)
+    if not acquire_success:
+        re_instantiate_engines()
+        engine_lock = threading.Lock()
+        sendHttpError(client_socket)
+        return
+    
+    try:
         total_engine_output = get_total_engine_output(request_lines)
+    finally:
+        engine_lock.release()
     log(f"total_engine_output: {total_engine_output}")
 
     response = 'HTTP/1.1 200 OK\n\n' + total_engine_output
